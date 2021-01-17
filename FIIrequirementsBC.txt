@@ -1,0 +1,70 @@
+token:
+
+marketplace:
+	- oracol pt timp
+	- register pt init-urile de la entitati (lista conturilor = query prin web3.js la portofel)
+	- create new product
+		atribute:
+			startedFunding? - funderi sa finanteze proiectul
+			startedDeveloping? - devi sa aplice la proiect
+			startedExecution? - devi sa se apuce de munca
+			workDone? - dev a zis ca e gata, proiectul intra on hold pt evaluarea managerului
+			managerValidated? - manager a acceptat sau nu proiectul
+			revValidated? - rev a validat sau nu proiectul
+			fundsRequired
+				executionCost
+				devCost
+				revCost
+			developingStartingDate
+			devMaxTimeout - enough dev + rev on project untill deadline
+			[] devi
+			[] revi
+			[] finantatori
+			manager
+			revStartingDate
+			revMaxTimeout - review deadline
+			projectStartingDate
+			projectMaxTimeout - project deadline
+			
+	- list financed products
+	- registerEvaluatorForProduct
+	- registerDevForPorduct
+		params:
+			cascavalRequestedForProduct
+	- acceptDevToWorkOnProjectX
+		modificator:
+			manager
+	- sendWorkDone
+		modificator:
+			dev
+	- acceptDevWork:
+		modificator:
+			manager
+			
+	- acceptManagerValidation:
+		modificator:
+			rev
+			
+		if validated:
+			....
+		if not validated:
+			reset all project
+			manage prices + reputatie
+			
+	- checkProjectDone
+		manager
+	- checkProjectValidatedByManager
+		rev
+	- checkProjectDone
+		managerValidated == true or revValidated == true
+	
+	
+		
+		
+		
+		
+		
+		
+		
+		
+	
