@@ -5,15 +5,15 @@ let contracts = {};
 async function init() {
     accounts = await web3.eth.getAccounts();
     contracts = {
-        tokenContract: new web3.eth.Contract(window.contracts.token.abi, window.contracts.token.address)
+        marketplaceContract: new web3.eth.Contract(window.contracts.marketplace.abi, window.contracts.marketplace.address)
     };
 }
 
 
 async function run() {
-    const { tokenContract } = contracts;
+    const { marketplaceContract } = contracts;
 
-    const result = await tokenContract.methods.hello().call({ from: accounts[0] });
+    const result = await marketplaceContract.methods.echo('hello').call({ from: accounts[0] });
     console.log(result);
 }
 

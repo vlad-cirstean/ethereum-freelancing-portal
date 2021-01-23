@@ -3,28 +3,30 @@ window.config = {
 };
 
 window.contracts = {
-    token: {
-        'abi': [
+    marketplace: {
+        abi: [
             {
-                'constant': false,
-                'inputs': [],
-                'name': 'hello',
-                'outputs': [
+                'inputs': [
                     {
                         'internalType': 'string',
-                        'name': 'x',
+                        'name': 'input',
                         'type': 'string'
                     }
                 ],
-                'payable': false,
+                'name': 'echo',
+                'outputs': [
+                    {
+                        'internalType': 'string',
+                        'name': 'text',
+                        'type': 'string'
+                    }
+                ],
                 'stateMutability': 'nonpayable',
                 'type': 'function'
             }
         ],
-        address: '0x74CE6aBdfBB861cb01b90Eb622162B5E2c3ED091'
+        address: '0xC53339b5aE716dc64946f961C1b6B47BbE027b9e'
     },
-    marketplace: {
-        abi: [],
-        address: '0x9'
+    token: { // should not be needed
     }
 };
