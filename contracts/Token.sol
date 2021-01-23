@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.7.6;
 
-contract Token {
-    function hello() public returns (string memory x) {
-        return "Hello!%";
+import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+
+contract Token is ERC20 {
+    uint public initialSupply = 1000000;
+
+    constructor() public ERC20('Gold', 'GLD') {
+        _mint(msg.sender, initialSupply);
     }
 }

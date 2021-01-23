@@ -21,7 +21,7 @@ window.contracts = {
                 'type': 'function'
             }
         ],
-        address: '0x9cfa40c23Ea750D3789F33516541115d8B0840a6'
+        address: '0x74CE6aBdfBB861cb01b90Eb622162B5E2c3ED091'
     },
     marketplace: {
         abi: [],

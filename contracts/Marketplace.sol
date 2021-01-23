@@ -1,7 +1,5 @@
-pragma solidity ^0.4.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.7.6;
 
 contract Marketplace {
-    function Marketplace(){
-
-    }
 }
