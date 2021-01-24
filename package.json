@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "serve": "browser-sync start --server web --files web",
+    "serve": "browser-sync 'web' 'build/contracts' -w",
     "truffle": "truffle migrate --reset"
   },
   "keywords": [],

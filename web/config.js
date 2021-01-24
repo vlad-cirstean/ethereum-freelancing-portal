@@ -4,29 +4,6 @@ window.config = {
 
 window.contracts = {
     marketplace: {
-        abi: [
-            {
-                'inputs': [
-                    {
-                        'internalType': 'string',
-                        'name': 'input',
-                        'type': 'string'
-                    }
-                ],
-                'name': 'echo',
-                'outputs': [
-                    {
-                        'internalType': 'string',
-                        'name': 'text',
-                        'type': 'string'
-                    }
-                ],
-                'stateMutability': 'nonpayable',
-                'type': 'function'
-            }
-        ],
-        address: '0xC53339b5aE716dc64946f961C1b6B47BbE027b9e'
-    },
-    token: { // should not be needed
+        address: '0x75F4b2EbFce2336D0BA022ed2Bb94b859c123896'
     }
 };
