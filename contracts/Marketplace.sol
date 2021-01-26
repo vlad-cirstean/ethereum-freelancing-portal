@@ -40,15 +40,18 @@ contract Marketplace {
         uint devTotalCost;
         uint revTotalCost;
 
+        uint numPayers;
+        uint numFreelancers;
+
         address[] projectPayers;
         address[] projectFreelancers;
         address projectEvaluator;
-        address projectManager;
 
         uint[] payersContribution;
         uint[] freelancersSalaries;
         uint evaluatorSalary;
         
+        address projectManager;
 
         int developingStartingDate;
         int devMaxTimeout;
