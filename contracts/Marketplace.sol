@@ -153,7 +153,7 @@ contract Marketplace {
         product.revMaxTimeout = revMaxTimeout;
         product.projectStartingDate = projectStartingDate;
         product.projectMaxTimeout = projectMaxTimeout;
-        
+
         product.description = description;
         product.expertise = expertise;
     }
@@ -168,7 +168,7 @@ contract Marketplace {
 
 
     function financeProduct(uint prodNumber, uint amount) public requirePayer {
-        require(products[prodNumber].startedFunding == false, 'project funding has finished');
+        require(products[prodNumber].startedFunding == true, 'project funding has finished');
 
         token.transferFrom(msg.sender, address(this), amount);
         products[prodNumber].fundsCollected += amount;
@@ -190,7 +190,7 @@ contract Marketplace {
     }
 
     function withdrawProductFinance(uint prodNumber, uint amount) public requirePayer {
-        require(products[prodNumber].startedFunding == false, 'project funding has finished');
+        require(products[prodNumber].startedFunding == true, 'project funding has finished');
 
         uint i;
         for (i = 0; i < products[prodNumber].projectPayers.length; i++) {
@@ -207,6 +207,7 @@ contract Marketplace {
     }
 
     function returnMoneyToPayers(uint prodNumber) public requireManager {
+        require(products[prodNumber].startedFunding == true, 'project funding has finished');
         require(products[prodNumber].projectManager == msg.sender, 'not manager of this product');
         for (uint i = 0; i < products[prodNumber].projectPayers.length; i++) {
             uint amount = products[prodNumber].payersContribution[i];
