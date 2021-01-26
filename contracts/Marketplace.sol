@@ -30,15 +30,16 @@ contract Marketplace {
         bool startedFunding;
         bool startedDeveloping;
         bool startedExecution;
-        
+
         bool workDone;
-        
+
         bool managerValidated;
         bool revValidated;
-        
+
         uint executionTotalCost;
         uint devTotalCost;
         uint revTotalCost;
+        uint totalCost;
 
         uint numPayers;
         uint numFreelancers;
@@ -48,6 +49,7 @@ contract Marketplace {
         address projectEvaluator;
 
         uint[] payersContribution;
+        uint fundsCollected;
         uint[] freelancersSalaries;
         uint evaluatorSalary;
         
@@ -65,7 +67,7 @@ contract Marketplace {
     }
 
     uint numPorducts;
-    mapping (uint => Product) products;
+    mapping(uint => Product) products;
 
     modifier requireOwner(){
         require(msg.sender == owner, "not owner crowd contract");
@@ -77,9 +79,17 @@ contract Marketplace {
         _;
     }
 
+    modifier requirePayer(){
+        require(payers[msg.sender].isValue, "not payer");
+        _;
+    }
+
     constructor() public {
-        token = new Token();
         owner = msg.sender;
+    }
+
+    function initToken(address adr) public requireOwner {
+        token = Token(adr);
     }
 
     function echo(string memory input) public returns (string memory text) {
@@ -100,7 +110,6 @@ contract Marketplace {
 
     function createPayer(address adr, string memory name) public requireOwner {
         payers[adr] = User(name, 5, '', true);
-        token.transfer(adr, 1000);
     }
 
     function createFreelancer(address adr, string memory name, string memory expertise) public requireOwner {
@@ -135,17 +144,19 @@ contract Marketplace {
         product.revValidated = false;
 
         product.projectManager = msg.sender;
-        product.developingStartingDate = -1;
-        product.revStartingDate = -1;
+        product.developingStartingDate = - 1;
+        product.revStartingDate = - 1;
 
         product.executionTotalCost = executionTotalCost;
         product.devTotalCost = devTotalCost;
         product.revTotalCost = revTotalCost;
+        product.totalCost = executionTotalCost + devTotalCost + revTotalCost;
+
         product.devMaxTimeout = devMaxTimeout;
         product.revMaxTimeout = revMaxTimeout;
         product.projectStartingDate = projectStartingDate;
         product.projectMaxTimeout = projectMaxTimeout;
-        
+
         product.description = description;
         product.expertise = expertise;
     }
@@ -156,5 +167,56 @@ contract Marketplace {
 
     function getProductCount() public view returns (uint) {
         return numPorducts;
+    }
+
+
+    function financeProduct(uint prodNumber, uint amount) public requirePayer {
+        require(products[prodNumber].startedFunding == true, 'project funding has finished');
+
+        token.transferFrom(msg.sender, address(this), amount);
+        products[prodNumber].fundsCollected += amount;
+
+        if (products[prodNumber].fundsCollected >= products[prodNumber].totalCost) {
+            products[prodNumber].startedFunding = false;
+            products[prodNumber].startedDeveloping = true;
+        }
+
+        uint i;
+        for (i = 0; i < products[prodNumber].projectPayers.length; i++) {
+            if (products[prodNumber].projectPayers[i] == msg.sender) {
+                products[prodNumber].payersContribution[i] += amount;
+                return;
+            }
+        }
+        products[prodNumber].projectPayers.push(msg.sender);
+        products[prodNumber].payersContribution.push(amount);
+    }
+
+    function withdrawProductFinance(uint prodNumber, uint amount) public requirePayer {
+        require(products[prodNumber].startedFunding == true, 'project funding has finished');
+
+        uint i;
+        for (i = 0; i < products[prodNumber].projectPayers.length; i++) {
+            if (products[prodNumber].projectPayers[i] == msg.sender) {
+                break;
+            }
+        }
+        require(products[prodNumber].projectPayers[i] == msg.sender, 'not financed this product');
+        require(products[prodNumber].payersContribution[i] >= amount, 'not enough funds');
+
+        products[prodNumber].payersContribution[i] -= amount;
+        products[prodNumber].fundsCollected -= amount;
+        token.transfer(msg.sender, amount);
+    }
+
+    function returnMoneyToPayers(uint prodNumber) public requireManager {
+        require(products[prodNumber].startedFunding == true, 'project funding has finished');
+        require(products[prodNumber].projectManager == msg.sender, 'not manager of this product');
+        for (uint i = 0; i < products[prodNumber].projectPayers.length; i++) {
+            uint amount = products[prodNumber].payersContribution[i];
+            if (amount >= 0) {
+                token.transfer(products[prodNumber].projectPayers[i], amount);
+            }
+        }
     }
 }
