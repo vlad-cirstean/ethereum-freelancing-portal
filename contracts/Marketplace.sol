@@ -219,4 +219,23 @@ contract Marketplace {
             }
         }
     }
+
+    function registerRevForProduct(uint productId, uint salary) public {
+        require(products[productId].projectEvaluator == address(0), "rev already exists for project");
+        require(products[productId].startedDeveloping == true, "project not funded yet");
+
+        products[productId].projectEvaluator = msg.sender;
+        products[productId].evaluatorSalary = salary;
+    }
+
+    function registerDevForProduct(uint productId, uint salary) public {
+        require(salary < products[productId].devTotalCost, "cost exceeds total cost allocated for devs");
+        require(products[productId].startedDeveloping == true, "project not funded yet");
+        
+        products[productId].projectFreelancers.push(msg.sender);
+        products[productId].freelancersSalaries.push(salary);
+        products[productId].numFreelancers++;
+    }
+
+    
 }
