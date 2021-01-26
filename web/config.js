@@ -4,6 +4,6 @@ window.config = {
 
 window.contracts = {
     marketplace: {
-        address: '0xC1f603f1B6f128b76569f2992e7543fE1530b1B4'
+        address: '0xd0F9f32F26B56f5C9ACaFb458537B2467Fd08B1b'
     }
 };

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">Marketplace</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="/">Manager</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="/routes/freelancer">Freelancer</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="/routes/evaluator">Evaluator</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="/routes/payer">Finantator</a>
+					</li>
+					<li>
+						<a class="nav-link active" aria-current="page" href="./products.html">Produse</a>
+					</li>
+					<li>
+						<button type="button" class="btn btn-primary" onclick="initActors()">Init</button>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<label for="gusAccountSelect">Account Select</label>
+				<select class="form-control" id="gusAccountSelect" onchange="getSelectedAccount()">
+				</select>
+			</div>
+			<div class="col">
+			</div>
+		<div>
+		</br></br>
+		<div class="row">
+			<div class="col">
+				<form>
+					<div class="mb-3">
+						<label for="gusExercutionCost" class="form-label">Execution cost</label>
+						<input type="number" class="form-control" id="gusExercutionCost">
+					</div>
+					<div class="mb-3">
+						<label for="gusDevCost" class="form-label">Developers cost</label>
+						<input type="number" class="form-control" id="gusDevCost">
+					</div>
+					<div class="mb-3">
+						<label for="gusRevCost" class="form-label">Evaluators cost</label>
+						<input type="number" class="form-control" id="gusRevCost">
+					</div>
+					<div class="mb-3">
+						<label for="gusDevMaxTimeout" class="form-label">Developers Apply to Project Deadline</label>
+						<input type="number" class="form-control" id="gusDevMaxTimeout">
+					</div>
+					<div class="mb-3">
+						<label for="gusRevMaxTimeout" class="form-label">Evaluator Answer Deadline</label>
+						<input type="number" class="form-control" id="gusRevMaxTimeout">
+					</div>
+					<div class="mb-3">
+						<label for="gusProjectTimeout" class="form-label">Project Deadline</label>
+						<input type="number" class="form-control" id="gusProjectTimeout">
+					</div>
+					<div class="mb-3">
+						<label for="gusDescription" class="form-label">Description</label>
+						<input type="text" class="form-control" id="gusDescription">
+					</div>
+					<div class="mb-3">
+						<label for="gusExpertise" class="form-label">Expertise</label>
+						<input type="text" class="form-control" id="gusExpertise">
+					</div>
+
+					<button type="submit" class="btn btn-primary" id="gusSubmitCreateProduct">Submit</button>
+				</form>
+			</div>
+			<div class="col">
+			</div>
+		</div>
+		</br></br>
+		<div id="gusProductList">
+
+		</div>
+	</div>
+</body>
+
+<script src="web3.js"></script>
+<script src="config.js"></script>
+<script src="products.js"></script>
+</html>

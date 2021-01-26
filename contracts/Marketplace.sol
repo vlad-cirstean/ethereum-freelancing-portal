@@ -56,6 +56,9 @@ contract Marketplace {
         int revMaxTimeout;
         int projectStartingDate;
         int projectMaxTimeout;
+
+        string description;
+        string expertise;
     }
 
     uint numPorducts;
@@ -116,7 +119,9 @@ contract Marketplace {
         int devMaxTimeout,
         int revMaxTimeout,
         int projectStartingDate,
-        int projectMaxTimeout
+        int projectMaxTimeout,
+        string memory description,
+        string memory expertise
     ) public {
         Product storage product = products[numPorducts++];
         product.startedFunding = true;
@@ -138,9 +143,15 @@ contract Marketplace {
         product.projectStartingDate = projectStartingDate;
         product.projectMaxTimeout = projectMaxTimeout;
         
+        product.description = description;
+        product.expertise = expertise;
     }
 
     function getProduct(uint prodNumber) public view returns (Product memory) {
         return products[prodNumber];
+    }
+
+    function getProductCount() public view returns (uint) {
+        return numPorducts;
     }
 }

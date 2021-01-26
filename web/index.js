@@ -3,6 +3,7 @@ let accounts = [];
 let marketplaceContract = {};
 
 const gas = 2500000;
+let productCount = -1;
 
 async function init() {
     const { abi: marketAbi } = await fetch('./Marketplace.json').then(res => res.json());
@@ -33,29 +34,6 @@ async function initActors() {
     }
 
     const result = await marketplaceContract.methods.getBalance(accounts[1]).call({ from: accounts[0] });
-    console.log(result);
-}
-
-async function createProduct() {
-
-    let executionTotalCost = 20
-    let devTotalCost = 30
-    let revTotalCost = 25
-    let devMaxTimeout = 5
-    let revMaxTimeout = 6
-    let projectStartingDate = new Date().getTime();
-    let projectMaxTimeout = 7
-    marketplaceContract.methods.createProduct(
-        executionTotalCost, devTotalCost, revTotalCost,
-        devMaxTimeout, revMaxTimeout, projectStartingDate, projectMaxTimeout
-    ).send({ from: accounts[0], gas: gas });
-
-
-}
-
-async function getProduct(productNumber) {
-
-    const result = await marketplaceContract.methods.getProduct(productNumber).call({ from: accounts[0] });
     console.log(result);
 }
 
