@@ -27,6 +27,15 @@ marketplace:
 			projectMaxTimeout - project deadline
 			
 	- list financed products
+	- contributToProject
+		modificator:
+			payer
+	- withdrawFromProject
+		modificator:
+			payer
+	- withdrawFromProjectManager:
+		modifcator:
+			manager
 	- registerEvaluatorForProduct
 	- registerDevForPorduct
 		params:
