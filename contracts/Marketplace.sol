@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.6;
+pragma abicoder v2;
 
 import './Token.sol';
 
@@ -41,12 +42,13 @@ contract Marketplace {
 
         address[] projectPayers;
         address[] projectFreelancers;
-        address projectManager;
         address projectEvaluator;
+        address projectManager;
 
-        mapping(address => paiedUser) freelancersSalaries;
-        mapping(address => paiedUser) evaluatorSalary;
-        mapping(address => paiedUser) payersContribution;
+        uint[] payersContribution;
+        uint[] freelancersSalaries;
+        uint evaluatorSalary;
+        
 
         int developingStartingDate;
         int devMaxTimeout;
@@ -56,7 +58,8 @@ contract Marketplace {
         int projectMaxTimeout;
     }
 
-    Product[] products;
+    uint numPorducts;
+    mapping (uint => Product) products;
 
     modifier requireOwner(){
         require(msg.sender == owner, "not owner crowd contract");
@@ -85,6 +88,10 @@ contract Marketplace {
         managers[adr] = User(name, 5, '', true);
     }
 
+    function getManager(address adr) public returns (User memory) {
+        return managers[adr];
+    }
+
     function createPayer(address adr, string memory name) public requireOwner {
         payers[adr] = User(name, 5, '', true);
         token.transfer(adr, 1000);
@@ -110,50 +117,30 @@ contract Marketplace {
         int revMaxTimeout,
         int projectStartingDate,
         int projectMaxTimeout
-    ) public requireManager {
-        bool startedFunding = true;
-        bool startedDeveloping = false;
-        bool startedExecution = false;
-        bool workDone = false;
-        bool managerValidated = false;
-        bool revValidated = false;
-        address[] projectPayers = new address[](0);
-        address[] projectFreelancers = new address[](0);
+    ) public {
+        Product storage product = products[numPorducts++];
+        product.startedFunding = true;
+        product.startedDeveloping = false;
+        product.startedExecution = false;
+        product.workDone = false;
+        product.managerValidated = false;
+        product.revValidated = false;
 
-        address projectManager = msg.sender;
-        address projectEvaluator = address(0);
+        product.projectManager = msg.sender;
+        product.developingStartingDate = -1;
+        product.revStartingDate = -1;
 
-        mapping(address => paiedUser) freelancersSalaries;
-        mapping(address => paiedUser) evaluatorSalary;
-        mapping(address => paiedUser) payersContribution;
-
-        int developingStartingDate = -1;
-        int revStartingDate = -1;
+        product.executionTotalCost = executionTotalCost;
+        product.devTotalCost = devTotalCost;
+        product.revTotalCost = revTotalCost;
+        product.devMaxTimeout = devMaxTimeout;
+        product.revMaxTimeout = revMaxTimeout;
+        product.projectStartingDate = projectStartingDate;
+        product.projectMaxTimeout = projectMaxTimeout;
         
-        product = Product(
-            startedFunding, 
-            startedDeveloping, 
-            startedExecution,
-            workDone,
-            managerValidated,
-            revValidated,
-            executionTotalCost,
-            devTotalCost,
-            revTotalCost,
-            projectPayers,
-            projectFreelancers,
-            projectManager,
-            projectEvaluator,
-            freelancersSalaries,
-            evaluatorSalary,
-            payersContribution,
-            developingStartingDate,
-            devMaxTimeout,
-            revStartingDate,
-            revMaxTimeout,
-            projectStartingDate,
-            projectMaxTimeout
-        );
-        products.push(product);
+    }
+
+    function getProduct(uint prodNumber) public view returns (Product memory) {
+        return products[prodNumber];
     }
 }

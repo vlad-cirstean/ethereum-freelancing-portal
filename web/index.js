@@ -2,6 +2,8 @@ const web3 = new Web3(window.config.provider);
 let accounts = [];
 let marketplaceContract = {};
 
+const gas = 2500000;
+
 async function init() {
     const { abi: marketAbi } = await fetch('./Marketplace.json').then(res => res.json());
     accounts = await web3.eth.getAccounts();
@@ -27,12 +29,39 @@ async function initActors() {
     ];
 
     for (const i of actors) {
-        await marketplaceContract.methods[i[0]](...i[1]).call({ from: accounts[0] });
+        await marketplaceContract.methods[i[0]](...i[1]).send({ from: accounts[0], gas: gas });
     }
 
     const result = await marketplaceContract.methods.getBalance(accounts[1]).call({ from: accounts[0] });
     console.log(result);
 }
 
+async function createProduct() {
+
+    let executionTotalCost = 20
+    let devTotalCost = 30
+    let revTotalCost = 25
+    let devMaxTimeout = 5
+    let revMaxTimeout = 6
+    let projectStartingDate = new Date().getTime();
+    let projectMaxTimeout = 7
+    marketplaceContract.methods.createProduct(
+        executionTotalCost, devTotalCost, revTotalCost,
+        devMaxTimeout, revMaxTimeout, projectStartingDate, projectMaxTimeout
+    ).send({ from: accounts[0], gas: gas });
+
+
+}
+
+async function getProduct(productNumber) {
+
+    const result = await marketplaceContract.methods.getProduct(productNumber).call({ from: accounts[0] });
+    console.log(result);
+}
+
+async function getManager(managerAdr) {
+    const result = await marketplaceContract.methods.getManager(managerAdr).call({ from: accounts[0] });
+    console.log(result)
+}
 
 init().then(_ => console.log('init done'));
