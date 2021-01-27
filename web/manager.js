@@ -18,6 +18,9 @@ async function init() {
         var role
         if(i == 0) {
             role = "manager"
+            var option = document.createElement("option");
+            option.text = "Account_" + i + "_" + role;
+            selector.add(option);
         }
         else if(i >= 1 && i <= 2) {
             role = "payer"
@@ -27,9 +30,6 @@ async function init() {
         }
         else {
             role = "rev";
-            var option = document.createElement("option");
-            option.text = "Account_" + i + "_" + role;
-            selector.add(option);
         }
 
 
