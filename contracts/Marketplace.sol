@@ -38,6 +38,8 @@ contract Marketplace {
         bool revValidated;
         bool revAnswer;
 
+        bool projectDone;
+
         uint executionTotalCost;
         uint devTotalCost;
         uint revTotalCost;
@@ -259,6 +261,13 @@ contract Marketplace {
                     freelancers[products[prodNumber].projectFreelancers[i]].rep--;
                 } 
             }
+
+            products[prodNumber].projectDone = true;
+            token.transfer(products[prodNumber].projectEvaluator, products[prodNumber].evaluatorSalary);
+            if(evaluators[products[prodNumber].projectEvaluator].rep > 0) {
+                evaluators[products[prodNumber].projectEvaluator].rep++;
+            }
+
 
             products[prodNumber].numFreelancers = 0;
             delete products[prodNumber].projectFreelancers;
