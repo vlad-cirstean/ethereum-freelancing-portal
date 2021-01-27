@@ -16,10 +16,10 @@ async function init() {
 }
 
 
-async function echo() {
+async function echo(index) {
     console.log(await marketplaceContract.methods.echo('hello').call({ from: accounts[0] }));
-    console.log(await marketplaceContract.methods.myAddress().call({ from: accounts[0] }));
-    console.log(await marketplaceContract.methods.getBalance(accounts[1]).call({ from: accounts[0] }));
+    console.log(await marketplaceContract.methods.myAddress().call({ from: accounts[index || 1] }));
+    console.log(await marketplaceContract.methods.getBalance(accounts[index || 1]).call({ from: accounts[0] }));
 }
 
 async function initActors() {

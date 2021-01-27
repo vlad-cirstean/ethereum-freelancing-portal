@@ -56,7 +56,7 @@ contract Marketplace {
         uint fundsCollected;
         uint[] freelancersSalaries;
         uint evaluatorSalary;
-        
+
         address projectManager;
 
         int developingStartingDate;
@@ -235,10 +235,75 @@ contract Marketplace {
     function registerDevForProduct(uint productId, uint salary) public {
         require(salary < products[productId].devTotalCost, "cost exceeds total cost allocated for devs");
         // require(products[productId].startedDeveloping == true, "project not funded yet");
-        
+
         products[productId].projectFreelancers.push(msg.sender);
         products[productId].freelancersSalaries.push(salary);
         products[productId].numFreelancers++;
+    }
+
+    function rejectDevToWorkOnProject(uint prodNumber, address devAdr) public {
+        require(products[prodNumber].startedDeveloping == true, "Project should be in execution");
+        require(products[prodNumber].projectManager == msg.sender, 'not manager of this product');
+
+        uint arrLength = products[prodNumber].projectFreelancers.length;
+        for (uint i = 0; i < arrLength; i++) {
+            if (products[prodNumber].projectFreelancers[i] == devAdr) {
+                products[prodNumber].projectFreelancers[i] = products[prodNumber].projectFreelancers[arrLength - 1];
+                products[prodNumber].projectFreelancers.pop();
+                break;
+            }
+        }
+
+        uint sum = 0;
+        for (uint i = 0; i < products[prodNumber].freelancersSalaries.length; i++) {
+            sum += products[prodNumber].freelancersSalaries[i];
+        }
+
+        if (sum == products[prodNumber].devTotalCost) {
+            products[prodNumber].managerValidated = false;
+            products[prodNumber].workDone = false;
+            products[prodNumber].startedExecution = true;
+            products[prodNumber].startedDeveloping = false;
+            products[prodNumber].startedFunding = false;
+        }
+    }
+
+    function sendWorkDone(uint prodNumber) public {
+        require(products[prodNumber].startedExecution == true, "Project should be in execution");
+
+        uint i;
+        for (i = 0; i < products[prodNumber].projectFreelancers.length; i++) {
+            if (products[prodNumber].projectFreelancers[i] == msg.sender) {
+                break;
+            }
+        }
+        require(products[prodNumber].projectFreelancers[i] == msg.sender, 'not dev of this product');
+
+        products[prodNumber].managerValidated = false;
+        products[prodNumber].workDone = true;
+        products[prodNumber].startedExecution = false;
+        products[prodNumber].startedDeveloping = false;
+        products[prodNumber].startedFunding = false;
+    }
+
+    function acceptDevWork(uint prodNumber) public {
+        require(products[prodNumber].workDone == true, "Project should be in execution");
+        require(products[prodNumber].projectManager == msg.sender, 'not manager of this product');
+
+
+        products[prodNumber].managerValidated = true;
+        products[prodNumber].workDone = false;
+        products[prodNumber].startedExecution = false;
+        products[prodNumber].startedDeveloping = false;
+        products[prodNumber].startedFunding = false;
+
+        for (uint i = 0; i < products[prodNumber].projectFreelancers.length; i++) {
+            token.transfer(products[prodNumber].projectFreelancers[i], products[prodNumber].freelancersSalaries[i]);
+
+            if (freelancers[products[prodNumber].projectFreelancers[i]].rep < 5) {
+                freelancers[products[prodNumber].projectFreelancers[i]].rep++;
+            }
+        }
     }
 
     function acceptManagerValidation(uint prodNumber, bool validated) public {
@@ -247,19 +312,19 @@ contract Marketplace {
         require(products[prodNumber].managerValidated == true, "Manager have not validated project");
         require(products[prodNumber].managerAnswer == false, "Manager approved project, no need for this");
 
-        if(validated) {
+        if (validated) {
             for (uint i = 0; i < products[prodNumber].projectFreelancers.length; i++) {
                 token.transfer(products[prodNumber].projectFreelancers[i], products[prodNumber].freelancersSalaries[i]);
 
-                if(freelancers[products[prodNumber].projectFreelancers[i]].rep < 5) {
+                if (freelancers[products[prodNumber].projectFreelancers[i]].rep < 5) {
                     freelancers[products[prodNumber].projectFreelancers[i]].rep++;
-                }   
+                }
             }
         } else {
             for (uint i = 0; i < products[prodNumber].projectFreelancers.length; i++) {
-                if(freelancers[products[prodNumber].projectFreelancers[i]].rep > 0) {
+                if (freelancers[products[prodNumber].projectFreelancers[i]].rep > 0) {
                     freelancers[products[prodNumber].projectFreelancers[i]].rep--;
-                } 
+                }
             }
 
             products[prodNumber].projectDone = true;
@@ -281,8 +346,8 @@ contract Marketplace {
             products[prodNumber].startedDeveloping = true;
             products[prodNumber].startedExecution = false;
             products[prodNumber].startedFunding = false;
-            
+
         }
     }
-    
+
 }
