@@ -327,6 +327,9 @@ contract Marketplace {
                     freelancers[products[prodNumber].projectFreelancers[i]].rep++;
                 }
             }
+
+            products[prodNumber].managerValidated = true;
+            products[prodNumber].projectDone = true;
         } else {
             for (uint i = 0; i < products[prodNumber].projectFreelancers.length; i++) {
                 if (freelancers[products[prodNumber].projectFreelancers[i]].rep > 0) {
