@@ -130,6 +130,9 @@ async function getProducts() {
                             })
                         };
 
+                        card.style.background = "#000000"
+                        card.style.color = "#f2f2f2"
+
                         divProdList.appendChild(new_row);
                         new_row.appendChild(card);
                         card.appendChild(cardBody);

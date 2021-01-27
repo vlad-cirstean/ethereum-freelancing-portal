@@ -157,6 +157,9 @@ async function getProducts() {
 
                         console.log(prod['projectFreelancers'])
 
+                        card.style.background = "#000000"
+                        card.style.color = "#f2f2f2"
+
                         for(let idxDev = 0; idxDev < a.length; idxDev++) {
                             console.log(idxDev)
                             var dev = a[idxDev]

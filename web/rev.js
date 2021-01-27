@@ -167,6 +167,9 @@ async function getProducts() {
                         cardBody.appendChild(buttonDenyManagerValidation);
 
                         divProdList.appendChild(document.createElement("br"));
+
+                        card.style.background = "#000000"
+                        card.style.color = "#f2f2f2"
                     }
                 )
             }

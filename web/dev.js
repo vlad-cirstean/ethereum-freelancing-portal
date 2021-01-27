@@ -137,6 +137,9 @@ async function getProducts() {
                         cardBody.appendChild(document.createElement("br"));
                         cardBody.appendChild(sendWorkDoneButton);
                         divProdList.appendChild(document.createElement("br"));
+
+                        card.style.background = "#000000"
+                        card.style.color = "#f2f2f2"
                     }
                 )
             }

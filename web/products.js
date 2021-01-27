@@ -36,7 +36,7 @@ async function init() {
 
     selectedAccount = accounts[0]
 
-    // getProducts();
+    getProducts();
 }
 
 function getSelectedAccount() {
@@ -109,8 +109,31 @@ async function getProducts() {
                         var t1 = document.createTextNode(prod['description']);
                         var para2 = document.createElement("p");
                         var t2 = document.createTextNode(prod['expertise']);
+
+                        var prodState = 'None'
+                        if(prod['projectDone']) {
+                            prodState = "Project Done"
+                        } else if (prod['managerValidated']) {
+                            prodState = "Awaiting Rev Decision (manager validated)"
+                        } else if (prod['workDone']) {
+                            prodState = "Awaiting Manager Decision (dev sent worke)"
+                        } else if (prod['startedExecution']) {
+                            prodState = "Awaiting Devs to Finish work"
+                        } else if (prod['startedDeveloping']) {
+                            prodState = "Awaiting Devs to apply to project and be selected"
+                        } else if (prod['startedFunding']) {
+                            prodState = "Awaiting payers to give us $$$"
+                        } else {
+                            prodState = "Project Barely started"
+                        }
+
+                        var para3 = document.createElement("p");
+                        var t3 = document.createTextNode(prodState);
+                        para3.style.background = "#232f3e"
+                        para3.style.color = "#f2f2f2"
                         
-                        console.log(prod['description'])
+                        card.style.background = "#000000"
+                        card.style.color = "#f2f2f2"
 
                         divProdList.appendChild(new_row);
                         new_row.appendChild(card);
@@ -121,6 +144,8 @@ async function getProducts() {
                         para.appendChild(t1);
                         cardBody.appendChild(para2);
                         para2.appendChild(t2);
+                        cardBody.appendChild(para3);
+                        para3.appendChild(t3);
                         divProdList.appendChild(document.createElement("br"));
                     }
                 )
