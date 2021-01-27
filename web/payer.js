@@ -1,6 +1,7 @@
 const web3 = new Web3(window.config.provider);
 let accounts = [];
 let marketplaceContract = {};
+let tokenContract = {};
 
 const gas = 2500000;
 
@@ -10,8 +11,11 @@ let selectedAccount
 
 async function init() {
     const { abi: marketAbi } = await fetch('./Marketplace.json').then(res => res.json());
+    const { abi: tokenAbi } = await fetch('./Token.json').then(res => res.json());
     accounts = await web3.eth.getAccounts();
     marketplaceContract = new web3.eth.Contract(marketAbi, window.contracts.marketplace.address);
+    tokenContract = new web3.eth.Contract(tokenAbi, window.contracts.token.address);
+    await marketplaceContract.methods.initToken(window.contracts.token.address).send({ from: accounts[0], gas });
 
     let selector = document.getElementById('gusAccountSelect')
     for(var i = 0; i < accounts.length; i++) {
@@ -69,15 +73,15 @@ async function getProducts() {
                     (prod) => {
                         var new_row = document.createElement('div');
                         new_row.className = "row";
-                        
+
                         var card = document.createElement('div');
                         card.className = "card"
-                        
+
                         var cardBody = document.createElement('div');
                         cardBody.className = "card-body"
 
                         var h = document.createElement("H1");
-                        h.className = "card-title"              
+                        h.className = "card-title"
                         var t = document.createTextNode("Project " + i);
                         var para = document.createElement("p");
                         var t1 = document.createTextNode(prod['description']);
@@ -90,21 +94,22 @@ async function getProducts() {
 
                         var button = document.createElement('button');
                         button.innerHTML = 'Contribute to project';
-                        button.onclick = function() {
+                        button.onclick = async function() {
                             let amountToContributeToProject = parseInt(document.getElementById("payer-project-" + i).value);
                             console.log(amountToContributeToProject)
                             // i = productNumber
                             // selectedAccount = finantatorul
-                            
 
-                            // marketplaceContract.methods.registerDevForProduct(i, sallary).send({ from: selectedAccount, gas }).then(
-                            //     (resp) => {
-                            //         console.log(resp);
-                            //     }
-                            // ).catch((error) => {
-                            //     console.error(error);
-                            //     alert(error);
-                            // })
+                            await tokenContract.methods.approve(window.contracts.marketplace.address, amountToContributeToProject).send({ from: selectedAccount, gas });
+                            marketplaceContract.methods.financeProduct(i, amountToContributeToProject).send({ from: selectedAccount, gas }).then(
+                                (resp) => {
+                                    console.log(resp);
+                                    alert(`Payed for project ${i} amount ${amountToContributeToProject}`)
+                                }
+                            ).catch((error) => {
+                                console.error(error);
+                                alert(error);
+                            })
                         };
 
                         var withdrawButton = document.createElement('button');
@@ -113,14 +118,16 @@ async function getProducts() {
                         withdrawButton.style.color='#232f3e';
                         withdrawButton.onclick = function() {
 
-                            // marketplaceContract.methods.registerDevForProduct(i, sallary).send({ from: selectedAccount, gas }).then(
-                            //     (resp) => {
-                            //         console.log(resp);
-                            //     }
-                            // ).catch((error) => {
-                            //     console.error(error);
-                            //     alert(error);
-                            // })
+                            let amountToContributeToProject = parseInt(document.getElementById("payer-project-" + i).value);
+
+                            marketplaceContract.methods.withdrawProductFinance(i, amountToContributeToProject).send({ from: selectedAccount, gas }).then(
+                                (resp) => {
+                                    console.log(resp);
+                                }
+                            ).catch((error) => {
+                                console.error(error);
+                                alert(error);
+                            })
                         };
 
                         divProdList.appendChild(new_row);
@@ -143,7 +150,13 @@ async function getProducts() {
             }
         }
     )
-    
+
+}
+
+async function echo(index) {
+    console.log(await marketplaceContract.methods.echo('hello').call({ from: accounts[0] }));
+    console.log(await marketplaceContract.methods.myAddress().call({ from: accounts[index || 1] }));
+    console.log(await marketplaceContract.methods.getBalance(accounts[index || 1]).call({ from: accounts[0] }));
 }
 
 init().then(_ => console.log('init done'));

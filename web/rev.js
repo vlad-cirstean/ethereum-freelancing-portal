@@ -70,21 +70,21 @@ async function getProducts() {
                         console.log(prod)
                         var new_row = document.createElement('div');
                         new_row.className = "row";
-                        
+
                         var card = document.createElement('div');
                         card.className = "card"
-                        
+
                         var cardBody = document.createElement('div');
                         cardBody.className = "card-body"
 
                         var h = document.createElement("H1");
-                        h.className = "card-title"              
+                        h.className = "card-title"
                         var t = document.createTextNode("Project " + i);
                         var para = document.createElement("p");
                         var t1 = document.createTextNode(prod['description']);
                         var para2 = document.createElement("p");
                         var t2 = document.createTextNode(prod['expertise']);
-                        
+
                         var input = document.createElement("INPUT");
                         input.setAttribute("type", "number");
                         input.id = "rev-project-" + i;
@@ -93,7 +93,7 @@ async function getProducts() {
                         button.innerHTML = 'Apply to project';
                         button.onclick = function() {
                             let sallary = parseInt(document.getElementById("rev-project-" + i).value);
-                            
+
                             console.log(i, sallary)
 
                             marketplaceContract.methods.registerRevForProduct(i, sallary).send({ from: selectedAccount, gas }).then(
@@ -134,7 +134,7 @@ async function getProducts() {
 
 
                         buttonDenyManagerValidation.onclick = function() {
-                            
+
                             marketplaceContract.methods.acceptManagerValidation(i, false).send({ from: selectedAccount, gas }).then(
                                 (resp) => {
                                     console.log(resp);
@@ -172,7 +172,7 @@ async function getProducts() {
             }
         }
     )
-    
+
 }
 
 init().then(_ => console.log('init done'));

@@ -250,6 +250,9 @@ contract Marketplace {
             if (products[prodNumber].projectFreelancers[i] == devAdr) {
                 products[prodNumber].projectFreelancers[i] = products[prodNumber].projectFreelancers[arrLength - 1];
                 products[prodNumber].projectFreelancers.pop();
+
+                products[prodNumber].freelancersSalaries[i] = products[prodNumber].freelancersSalaries[arrLength - 1];
+                products[prodNumber].freelancersSalaries.pop();
                 break;
             }
         }
@@ -286,7 +289,7 @@ contract Marketplace {
         products[prodNumber].startedFunding = false;
     }
 
-    function acceptDevWork(uint prodNumber) public {
+    function acceptDevWork(uint prodNumber, bool accepted) public {
         require(products[prodNumber].workDone == true, "Project should be in execution");
         require(products[prodNumber].projectManager == msg.sender, 'not manager of this product');
 
@@ -297,11 +300,15 @@ contract Marketplace {
         products[prodNumber].startedDeveloping = false;
         products[prodNumber].startedFunding = false;
 
-        for (uint i = 0; i < products[prodNumber].projectFreelancers.length; i++) {
-            token.transfer(products[prodNumber].projectFreelancers[i], products[prodNumber].freelancersSalaries[i]);
+        products[prodNumber].managerAnswer = accepted;
 
-            if (freelancers[products[prodNumber].projectFreelancers[i]].rep < 5) {
-                freelancers[products[prodNumber].projectFreelancers[i]].rep++;
+        if (accepted == true) {
+            for (uint i = 0; i < products[prodNumber].projectFreelancers.length; i++) {
+                token.transfer(products[prodNumber].projectFreelancers[i], products[prodNumber].freelancersSalaries[i]);
+
+                if (freelancers[products[prodNumber].projectFreelancers[i]].rep < 5) {
+                    freelancers[products[prodNumber].projectFreelancers[i]].rep++;
+                }
             }
         }
     }
@@ -329,7 +336,7 @@ contract Marketplace {
 
             products[prodNumber].projectDone = true;
             token.transfer(products[prodNumber].projectEvaluator, products[prodNumber].evaluatorSalary);
-            if(evaluators[products[prodNumber].projectEvaluator].rep > 0) {
+            if (evaluators[products[prodNumber].projectEvaluator].rep > 0) {
                 evaluators[products[prodNumber].projectEvaluator].rep++;
             }
 

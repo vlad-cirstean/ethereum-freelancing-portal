@@ -35,7 +35,8 @@ async function init() {
 
     }
 
-    selectedAccount = accounts[0]
+    selectedAccount = accounts[0];
+    getProducts();
 }
 
 function getSelectedAccount() {
@@ -70,21 +71,21 @@ async function getProducts() {
                         console.log(prod)
                         var new_row = document.createElement('div');
                         new_row.className = "row";
-                        
+
                         var card = document.createElement('div');
                         card.className = "card"
-                        
+
                         var cardBody = document.createElement('div');
                         cardBody.className = "card-body"
 
                         var h = document.createElement("H1");
-                        h.className = "card-title"              
+                        h.className = "card-title"
                         var t = document.createTextNode("Project " + i);
                         var para = document.createElement("p");
                         var t1 = document.createTextNode(prod['description']);
                         var para2 = document.createElement("p");
                         var t2 = document.createTextNode(prod['expertise']);
-                        
+
                         var input = document.createElement("INPUT");
                         input.setAttribute("type", "number");
                         input.id = "rev-project-" + i;
@@ -102,31 +103,31 @@ async function getProducts() {
                         workDoneDenyButton.style.color = 'white';
 
                         workDoneAcceptButton.onclick = function() {
-                            
+
                             let projectAccepted = true
-                            // marketplaceContract.methods.registerRevForProduct(i, sallary).send({ from: selectedAccount, gas }).then(
-                            //     (resp) => {
-                            //         console.log(resp);
-                            //         alert("Registered for product " + i);
-                            //     }
-                            // ).catch((error) => {
-                            //     console.error(error);
-                            //     alert(error);
-                            // })
+                            marketplaceContract.methods.acceptDevWork(i, projectAccepted).send({ from: selectedAccount, gas }).then(
+                                (resp) => {
+                                    console.log(resp);
+                                    alert("Project dev work accepted for product " + i);
+                                }
+                            ).catch((error) => {
+                                console.error(error);
+                                alert(error);
+                            })
                         };
 
                         workDoneDenyButton.onclick = function() {
-                            
+
                             let projectAccepted = false
-                            // marketplaceContract.methods.registerRevForProduct(i, sallary).send({ from: selectedAccount, gas }).then(
-                            //     (resp) => {
-                            //         console.log(resp);
-                            //         alert("Registered for product " + i);
-                            //     }
-                            // ).catch((error) => {
-                            //     console.error(error);
-                            //     alert(error);
-                            // })
+                            marketplaceContract.methods.acceptDevWork(i, projectAccepted).send({ from: selectedAccount, gas }).then(
+                                (resp) => {
+                                    console.log(resp);
+                                    alert("Project dev work not accepted for product " + i);
+                                }
+                            ).catch((error) => {
+                                console.error(error);
+                                alert(error);
+                            })
                         };
 
 
@@ -145,14 +146,14 @@ async function getProducts() {
                         cardBody.appendChild(workDoneDenyButton)
 
 
-                        var h2 = document.createElement("H3");      
+                        var h2 = document.createElement("H3");
                         var t3 = document.createTextNode("Project Devs that Applied");
                         new_row.appendChild(document.createElement("br"))
                         new_row.appendChild(h2)
                         h2.appendChild(t3)
 
-                        a = ['fre11', 'free2']
-                        b =  [123, 432]
+                        const a = prod.projectFreelancers;
+                        const b =  prod.freelancersSalaries;
 
                         console.log(prod['projectFreelancers'])
 
@@ -164,12 +165,12 @@ async function getProducts() {
                             var card = document.createElement('div');
                             card.id = 'card-dev-' + i + '_' + idxDev
                             card.className = "card"
-                            
+
                             var cardBody = document.createElement('div');
                             cardBody.className = "card-body"
 
                             var h = document.createElement("H2");
-                            h.className = "card-title"              
+                            h.className = "card-title"
                             var t = document.createTextNode(dev);
 
                             var para = document.createElement("p");
@@ -192,35 +193,35 @@ async function getProducts() {
 
                             new_row.appendChild(document.createElement("br"))
                             new_row.appendChild(card)
-    
+
                             rejectDevButton.onclick = function() {
-                                
+
                                 alert("Dev Rejected from project")
                                 // call reject dev
 
-                                // marketplaceContract.methods.registerRevForProduct(i, sallary).send({ from: selectedAccount, gas }).then(
-                                //     (resp) => {
-                                //         console.log(resp);
-                                //         alert("Registered for product " + i);
-                                //     }
-                                // ).catch((error) => {
-                                //     console.error(error);
-                                //     alert(error);
-                                // })
+                                marketplaceContract.methods.rejectDevToWorkOnProject(i, a[i]).send({ from: selectedAccount, gas }).then(
+                                    (resp) => {
+                                        console.log(resp);
+                                        alert("Reject dev for product " + i);
+                                    }
+                                ).catch((error) => {
+                                    console.error(error);
+                                    alert(error);
+                                })
 
                                 let auxCard = document.getElementById('card-dev-'+ i + '_' + idxDev)
                                 let auxBttn = document.getElementById('reject-button-dev-' + i + '_' + idxDev)
                                 auxCard.removeChild(auxBttn);
                             };
                         }
-                        
+
                         divProdList.appendChild(document.createElement("br"));
                     }
                 )
             }
         }
     )
-    
+
 }
 
 init().then(_ => console.log('init done'));
