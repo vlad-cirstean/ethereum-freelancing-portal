@@ -26,12 +26,13 @@ async function init() {
             role = "dev"
         }
         else {
-            role = "rev"
+            role = "rev";
+            var option = document.createElement("option");
+            option.text = "Account_" + i + "_" + role;
+            selector.add(option);
         }
 
-        var option = document.createElement("option");
-        option.text = "Account_" + i + "_" + role;
-        selector.add(option);
+
     }
 
     selectedAccount = accounts[0]
@@ -63,7 +64,7 @@ async function getProducts() {
             divProdList = document.getElementById("gusProductList")
             divProdList.innerHTML = "";
 
-            for(var i = 0; i < prodCount; i++) {
+            for(let i = 0; i < prodCount; i++) {
                 getProduct(i).then(
                     (prod) => {
                         console.log(prod)
@@ -98,9 +99,50 @@ async function getProducts() {
                             marketplaceContract.methods.registerRevForProduct(i, sallary).send({ from: selectedAccount, gas }).then(
                                 (resp) => {
                                     console.log(resp);
+                                    alert("Registered for product " + i);
                                 }
                             ).catch((error) => {
                                 console.error(error);
+                                alert(error);
+                            })
+                        };
+
+
+                        var buttonAcceptManagerValidation = document.createElement('button');
+                        var buttonDenyManagerValidation = document.createElement('button');
+
+                        buttonAcceptManagerValidation.innerHTML = 'Accept manager validation';
+                        buttonDenyManagerValidation.innerHTML = 'Deny manager validation';
+
+                        buttonAcceptManagerValidation.style.background='#228B22';
+                        buttonDenyManagerValidation.style.background='#FF0000';
+                        buttonAcceptManagerValidation.style.color = 'white';
+                        buttonDenyManagerValidation.style.color = 'white';
+
+                        buttonAcceptManagerValidation.onclick = function() {
+
+                            marketplaceContract.methods.acceptManagerValidation(i, true).send({ from: selectedAccount, gas }).then(
+                                (resp) => {
+                                    console.log(resp);
+                                    alert("Accepted manager validation as being right");
+                                }
+                            ).catch((error) => {
+                                console.error(error);
+                                alert(error);
+                            })
+                        };
+
+
+                        buttonDenyManagerValidation.onclick = function() {
+                            
+                            marketplaceContract.methods.acceptManagerValidation(i, false).send({ from: selectedAccount, gas }).then(
+                                (resp) => {
+                                    console.log(resp);
+                                    alert("Deny manager validation for being wrong")
+                                }
+                            ).catch((error) => {
+                                console.error(error);
+                                alert(error);
                             })
                         };
 
@@ -113,8 +155,15 @@ async function getProducts() {
                         para.appendChild(t1);
                         cardBody.appendChild(para2);
                         para2.appendChild(t2);
-                        cardBody.appendChild(input);
-                        cardBody.appendChild(button);
+
+                        if(prod['projectEvaluator'] != selectedAccount) {
+                            cardBody.appendChild(input);
+                            cardBody.appendChild(button);
+                        }
+
+                        cardBody.appendChild(buttonAcceptManagerValidation);
+                        cardBody.appendChild(buttonDenyManagerValidation);
+
                         divProdList.appendChild(document.createElement("br"));
                     }
                 )

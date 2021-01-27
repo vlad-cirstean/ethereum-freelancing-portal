@@ -24,14 +24,15 @@ async function init() {
         }
         else if(i >= 3 && i <= 5) {
             role = "dev"
+            var option = document.createElement("option");
+            option.text = "Account_" + i + "_" + role;
+            selector.add(option);
         }
         else {
             role = "rev"
         }
 
-        var option = document.createElement("option");
-        option.text = "Account_" + i + "_" + role;
-        selector.add(option);
+
     }
 
     selectedAccount = accounts[0]
@@ -100,6 +101,7 @@ async function getProducts() {
                                 }
                             ).catch((error) => {
                                 console.error(error);
+                                alert(error);
                             })
                         };
 

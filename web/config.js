@@ -4,9 +4,9 @@ window.config = {
 
 window.contracts = {
     marketplace: {
-        address: '0xCcd828f9C3e57d5850a8D09f8718C7D1E5bD3693'
+        address: '0xE1c5C9E6dC435B859f149566525F66F2bE7F7250'
     },
     token: {
-        address: '0x0555f2f519D713765f27dAD1E0879a1691AfbeE1'
+        address: '0x9dE43FF77Dec6bFd2cb4Ec46d3eCA3BF256d5fa5'
     }
 };
