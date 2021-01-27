@@ -159,6 +159,8 @@ async function getProducts() {
                         if(prod['projectEvaluator'] != selectedAccount) {
                             cardBody.appendChild(input);
                             cardBody.appendChild(button);
+                            cardBody.appendChild(document.createElement("br"));
+                            cardBody.appendChild(document.createElement("br"));
                         }
 
                         cardBody.appendChild(buttonAcceptManagerValidation);

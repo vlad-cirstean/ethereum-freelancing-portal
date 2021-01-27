@@ -105,6 +105,22 @@ async function getProducts() {
                             })
                         };
 
+                        var sendWorkDoneButton = document.createElement('button');
+                        sendWorkDoneButton.innerHTML = 'Work Done';
+                        sendWorkDoneButton.style.background='#ff9900';
+                        sendWorkDoneButton.style.color='#232f3e';
+                        sendWorkDoneButton.onclick = function() {
+
+                            // marketplaceContract.methods.registerDevForProduct(i, sallary).send({ from: selectedAccount, gas }).then(
+                            //     (resp) => {
+                            //         console.log(resp);
+                            //     }
+                            // ).catch((error) => {
+                            //     console.error(error);
+                            //     alert(error);
+                            // })
+                        };
+
                         divProdList.appendChild(new_row);
                         new_row.appendChild(card);
                         card.appendChild(cardBody);
@@ -116,6 +132,9 @@ async function getProducts() {
                         para2.appendChild(t2);
                         cardBody.appendChild(input);
                         cardBody.appendChild(button);
+                        cardBody.appendChild(document.createElement("br"));
+                        cardBody.appendChild(document.createElement("br"));
+                        cardBody.appendChild(sendWorkDoneButton);
                         divProdList.appendChild(document.createElement("br"));
                     }
                 )
