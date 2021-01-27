@@ -290,12 +290,12 @@ contract Marketplace {
     }
 
     function acceptDevWork(uint prodNumber, bool accepted) public {
-        require(products[prodNumber].workDone == true, "Project should be in execution");
+        require(products[prodNumber].workDone == true, "Project should be work done");
         require(products[prodNumber].projectManager == msg.sender, 'not manager of this product');
 
 
         products[prodNumber].managerValidated = true;
-        products[prodNumber].workDone = false;
+        products[prodNumber].workDone = true;
         products[prodNumber].startedExecution = false;
         products[prodNumber].startedDeveloping = false;
         products[prodNumber].startedFunding = false;
