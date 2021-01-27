@@ -337,7 +337,7 @@ contract Marketplace {
                 }
             }
 
-            products[prodNumber].projectDone = true;
+            products[prodNumber].projectDone = false;
             token.transfer(products[prodNumber].projectEvaluator, products[prodNumber].evaluatorSalary);
             if (evaluators[products[prodNumber].projectEvaluator].rep > 0) {
                 evaluators[products[prodNumber].projectEvaluator].rep++;
